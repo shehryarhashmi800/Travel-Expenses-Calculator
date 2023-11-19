@@ -1,0 +1,429 @@
+#include<iostream>
+using namespace std;
+
+void getDays(int&);                                                                        //Function Prototypes...........
+void getTimeOfDeparture(int&);                                                             //Function Prototypes...........
+void getTimeOfArrival(int&);                                                               //Function Prototypes...........
+void getFlight(double&, double&);                                                          //Function Prototypes...........
+void getRentCar(double&, double&);                                                         //Function Prototypes...........
+void getPrivateVehicle(int&, int&, double&, double&);                                      //Function Prototypes...........
+void getParking(int&, int&, double&, double&, double&, double&);                           //Function Prototypes...........
+void getTaxi(int&, int&, double&, double&, double&, double&);                              //Function Prototypes...........
+void getSeminar(int&, int&, double&, double&);                                             //Function Prototypes...........
+void getHotelExpanses(int&, int&, double&, double&, double&, double&);                     //Function Prototypes...........
+void getMeal(int&, int&, int&, int&, double&, double&, double&, double&);                  //Function Prototypes...........
+
+int main() {                                                                               //Main Function.........
+	char repeat = 'n';
+	do{
+		int daysCount = 0, days, timeOfDeparture, timeOfArrival;
+		double employeeCharges = 0, companyCharges = 0, savedMoney = 0, totalExpense = 0;
+		cout << endl << "  Welcome!" << endl;
+		cout << "  Here We will Calculate the Total" << endl;
+		cout << "  Expenses of a Business Trip!" << endl;
+		cout << "  including Total Charges,Company charges" << endl;
+		cout << "  and Employee charges!" << endl << endl << endl;
+
+		getDays(daysCount);                                                                                                        /////////
+		getTimeOfDeparture(timeOfDeparture);                                                                                              //
+		getTimeOfArrival(timeOfArrival);                                                                                                  //
+		getFlight(companyCharges, totalExpense);                                                                                          //
+		getRentCar(companyCharges, totalExpense);                                                                                         //
+		getPrivateVehicle(days, daysCount, companyCharges, totalExpense);                                                                 //// Calling Functions
+		getParking(days, daysCount, employeeCharges, companyCharges, savedMoney, totalExpense);                                           //
+		getTaxi(days, daysCount, employeeCharges, companyCharges, savedMoney, totalExpense);                                              //
+		getSeminar(days, daysCount, companyCharges, totalExpense);                                                                        //
+		getHotelExpanses(days, daysCount, employeeCharges, companyCharges, savedMoney, totalExpense);                                     //
+		getMeal(days, daysCount, timeOfDeparture, timeOfArrival, employeeCharges, companyCharges, savedMoney, totalExpense);       /////////
+		
+		
+				cout << "    ==> Total Bill of Travel is $" << totalExpense << endl;
+				cout << "    ==> Company Charges are $" << companyCharges << endl;
+				if (savedMoney > 0 && employeeCharges > 0 && savedMoney <= employeeCharges) {
+					employeeCharges -= savedMoney;
+					savedMoney = 0;
+				}
+				else if (savedMoney > 0 && employeeCharges > 0 && savedMoney >= employeeCharges) {                 // Condition to Reduce employee charges
+					savedMoney -= employeeCharges;                                                                 // when greater than saved money...............
+					employeeCharges = 0;
+				}
+				cout << "    ==> Employee Charges are $" << employeeCharges << endl;
+				cout << "    ==> The Money Saved is $" << savedMoney << endl;
+				cout << "Do You Want to repeat? ";
+				cin >> repeat;
+			} while (repeat == 'Y' || repeat == 'y');
+			return 0;
+		    }
+		void getDays(int& daysCount) {                                                       // Defining get Days Fiunction.......
+			do {
+				cout << "Enter number of days you spent on trip: ";                          // // Asking For No. of Days...........
+				cin >> daysCount;
+			} while (daysCount < 1);
+		}
+		void getTimeOfDeparture(int& timeOfDeparture) {                                       // Defining getTime of Departure Function................ 
+			int timeChoice, iInput = 1;
+			do {
+				cout << "Enter the Time of Departure of Trip in 12 Hour Format (Hour) : "; cin >> timeOfDeparture;            // Getting Time Of Departure...........
+				if (timeOfDeparture < 1 || timeOfDeparture>12) {                             // Input Validation.
+					cout << "Invalid Input!" << endl << "Enter Again!" << endl;
+				}
+			} while (timeOfDeparture < 1 || timeOfDeparture>12);
+			do {
+				cout << "Chose One!" << endl;                                               // Chosing AM or PM........
+				cout << "1. AM" << endl;
+				cout << "2. PM" << endl;
+				cin >> timeChoice;
+				if (timeChoice == 1) {
+					timeOfDeparture = timeOfDeparture;
+				}
+				else if (timeChoice == 2) {                                      // Conditions to convert 12 hour format to 24 hour format...........
+					timeOfDeparture += 12;
+				}
+				else {
+					cout << "Invalid Input!" << endl << "Enter Again!" << endl;        // Input Validation............
+					iInput = 5;
+				}
+			} while (iInput == 5);
+		
+		
+		}
+		void getTimeOfArrival(int& timeOfArrival) {                                     // Defining getTime of Arrival Function................ 
+			int atimeChoice, iInput = 1;
+			do {
+				cout << "Enter the Time of Arrival of Trip in 12 Hour Format (Hour) : "; cin >> timeOfArrival;     // Getting Time Of Arrival...............
+				if (timeOfArrival < 1 || timeOfArrival>12) {
+					cout << "Invalid Input!" << endl << "Enter Again!" << endl;                       // Input Validation............
+				}
+			} while (timeOfArrival < 1 || timeOfArrival>12);
+			do {
+				cout << "Chose One!" << endl;
+				cout << "1. AM" << endl;                                                // Chosing AM or PM..............
+				cout << "2. PM" << endl;
+				cin >> atimeChoice;
+				if (atimeChoice == 1) {
+					timeOfArrival = timeOfArrival;
+				}
+				else if (atimeChoice == 2) {                                            // Conditions to convert 12 hour format to 24 hour format...........
+					timeOfArrival += 12;
+				}
+				else {
+					cout << "Invalid Input!" << endl << "Enter Again!" << endl;               // Input Validation.......
+					iInput = 5;
+				}
+			} while (iInput == 5);
+		
+		
+		}
+		void getFlight(double& companyCharges, double& totalExpense) {                   // Defining getFlight Function................     
+			char flight;
+			int iInput = 1;
+			double airFare;
+			do {
+				cout << "Have you Travelled through any Flight during Trip? (Y/N) "; cin >> flight;    // Asking For Flight...........
+				if (flight == 'Y' || flight == 'y') {
+					cout << "Enter the Amount of AirFare (Round-Trip): "; cin >> airFare;
+					companyCharges += airFare;                                                   // Adding AirFare in Comppany Charges..............
+					totalExpense += airFare;                                                     // Adding Airare in Total Expenses.............
+					cout << "  Air Fare is $" << airFare << endl;
+				}
+				else if (flight == 'N' || flight == 'n') {
+					cout << "It's Okay!" << endl;
+				}
+				else {
+					cout << "Invalid Input!" << endl;                        // Input Validation..........
+					iInput = 5;
+				}
+			} while (iInput == 5);
+		}
+		void getRentCar(double& companyCharges, double& totalExpense) {                  // Defining getRent Car Function....... 
+			char rentalCar;
+			int iInput = 0;
+			double carRentals;
+			do {
+				cout << "Have you used any Rental Car? (Y/N) "; cin >> rentalCar;            // Asking For Rental Car........... 
+				if (rentalCar == 'Y' || rentalCar == 'y') {
+					cout << "Enter the Amount of Car Rentals: "; cin >> carRentals;
+					companyCharges += carRentals;                                            // Adding Car Rent in Comppany Charges..............
+					totalExpense += carRentals;                                              // // Adding Car Rent in Total Expenses.............
+					cout << "  Rental Car rent is $" << carRentals << endl;
+				}
+				else if (rentalCar == 'N' || rentalCar == 'n') {
+					cout << "It's Okay!" << endl;
+				}
+				else {
+					cout << "Invalid Input!" << endl;
+					iInput = 5;
+				}
+			} while (iInput == 5);
+		}
+		void getPrivateVehicle(int& days, int& daysCount, double& companyCharges, double& totalExpense) {       // Defining get Private Vehicle Function.......   
+			double totalPrivateVehicle = 0;
+			for (days = 1; days <= daysCount; days++) {
+				char private_vehicle;
+				double privateVehicle = 0;
+				while (true)                                                    // Condition for Input Validation............
+				{
+					cout << "Did Tou Travel on Private Vehicle on Day " << days << "?(Y/N): ";             // Asking for Travel on Private Vehicle or not..........
+					cin >> private_vehicle;
+		
+					if (private_vehicle == 'y' || private_vehicle == 'Y') {
+						int miles;
+		
+						do
+						{
+							cout << "Enter the Miles You Travel on Private Vehicle on Day" << days << " : ";          // Asking for No. of miles if travelled on Private Vehicle.............
+							cin >> miles;
+						} while (miles < 0);
+						privateVehicle = miles * 0.27;
+						break;
+					}
+					else if (private_vehicle == 'N' || private_vehicle == 'n') {
+						cout << "Thats okay!" << endl;
+						privateVehicle = 0;
+						break;
+					}
+					else {
+						cout << "Invalid Input!" << endl;                                          // Input Validation...........
+						continue;
+					}
+				}
+				totalPrivateVehicle += privateVehicle;
+			}
+			cout << "  Total Amount spent on Private Vehicle is: $" << totalPrivateVehicle << endl << endl;
+			totalExpense = totalExpense + totalPrivateVehicle;                  // Adding Private Vehicle Expense in Total Expense........
+			companyCharges += totalPrivateVehicle;                              // Adding Private Vehicle Expense in Company Carges............
+		}
+		void getParking(int& days, int& daysCount, double& employeeCharges, double& companyCharges, double& savedMoney, double& totalExpense)      // Defining get Parking Function....... 
+		{
+			double TotalParkingFees = 0;
+			for (days = 1; days <= daysCount; days++) {
+				int parkingFees = 0;
+				do {
+					cout << "Enter the Parking Fees for Day" << days << ": ";                    // Asking for Parking Fee...........
+					cin >> parkingFees;
+					companyCharges = companyCharges + 6;                                         // Adding Allowable Parking Fee in Company Charges..............
+					if (parkingFees <= 6) {
+						savedMoney = savedMoney + (6 - parkingFees);                             // Addition of Parking Fee less than Allowable..............
+					}
+					if (parkingFees > 6) {
+						employeeCharges = employeeCharges + (parkingFees - 6);                   // Addition of Parking Fee greater than Allowable..............
+					}
+				} while (parkingFees < 0);
+				TotalParkingFees += parkingFees;                                                 // Input Validation.................
+			}
+			cout << "  Total Parking Fees is: $" << TotalParkingFees << endl << endl;
+			totalExpense = totalExpense + TotalParkingFees;                                   // Adding Parking Fee in Total Expenses...........
+		}
+		void getTaxi(int& days, int& daysCount, double& employeeCharges, double& companyCharges, double& savedMoney, double& totalExpense)       // Defining get Taxi Expanse Function.......  
+		{
+			double totalTaxiExpanse = 0;
+			int taxiExpanse = 0;
+			for (days = 1; days <= daysCount; days++) {
+				char taxi;
+		
+				while (true) {                                                                 // Condition For Input Validation..............
+					cout << "Did You Used any Taxi on Day" << days << " ? (Y / N) : ";         // Asking for use of Taxi or not..........
+					cin >> taxi;
+					if (taxi == 'y' || taxi == 'Y') {
+						do {
+							cout << "Enter the Taxi Expenses For Day " << days << " : ";          // Getting Taxi Charges...........
+							cin >> taxiExpanse;
+						} while (taxiExpanse < 0);
+						companyCharges = companyCharges + 10;                                   // Adding Allowable Parking Fee in Company Charges..............
+						if (taxiExpanse < 10) {
+							savedMoney = savedMoney + (10 - taxiExpanse);                       // Addition of Taxi Fee less than Allowable..............
+						}
+						if (taxiExpanse > 10) {
+							employeeCharges = employeeCharges + (taxiExpanse - 10);           // Addition of Taxi Fee greater than Allowable..............
+						}
+						break;
+					}
+					else if (taxi == 'n' || taxi == 'N')
+					{
+						cout << "Thats okay!" << endl;                                   // Refusing to Use Taxi.............
+						taxiExpanse = 0;
+						break;
+					}
+					else {
+						cout << "Invalid Input!" << endl;                               // Input Validation.................
+						continue;
+					}
+				}
+				totalTaxiExpanse += taxiExpanse;                                       // Adding Taxi Fee in Total Expenses...........
+			}
+		
+		
+			cout << "  Total Amount Spent on Taxi is: $" << totalTaxiExpanse << endl << endl;
+			totalExpense = totalExpense + totalTaxiExpanse;
+		
+		}
+		void getSeminar(int& days, int& daysCount, double& companyCharges, double& totalExpense)       // Defining get Seminar Expanse Function.......  
+		{
+			double totalSeminarFees = 0;
+			for (days = 1; days <= daysCount; days++) {
+				int seminarFees = 0;
+				char seminar;
+				while (true) {                                                          // Condition For Input Validation..............
+					cout << "Did you Attend any Seminar or Conference on Day " << days << " ? (Y/N): ";                  // Asking for Attending Seminar or not............ 
+					cin >> seminar;
+					if (seminar == 'Y' || seminar == 'y') {
+						do {
+							cout << "Enter the Conference or Seminar registration fee for day " << days << " : ";         // Getting Seminar Charges.............
+							cin >> seminarFees;
+						} while (seminarFees < 0);
+						break;
+					}
+					else if (seminar == 'N' || seminar == 'n') {                          // Refusing to Attend Seminar............
+						cout << "Thats Okay!" << endl;
+						seminarFees = 0;
+						break;
+					}
+					else {
+						cout << "Invalid Input" << endl;
+						seminarFees = 0;                                                  // Input Validation....................
+						continue;
+					}
+				}
+				totalSeminarFees += seminarFees;                                            // Adding Taxi Fee in Total Expenses...........
+			}
+			cout << "  Total Seminar Fees is: $" << totalSeminarFees << endl << endl;
+			totalExpense = totalExpense + totalSeminarFees;
+			companyCharges += totalSeminarFees;                                     // Adding Taxi Fee in Company Charges...........
+		}
+		void getHotelExpanses(int& days, int& daysCount, double& employeeCharges, double& companyCharges, double& savedMoney, double& totalExpense) {      // Defining get Hotel Expenses Function.......    
+			double totalHotelExpanse = 0;
+			for (days = 1; days < daysCount; days++)
+			{
+				int hotelExpanse;
+				do {
+					cout << "Enter the Hotel expanses for Night " << days << " : ";                   // Getting Hotel Expenses..........
+					cin >> hotelExpanse;
+				} while (hotelExpanse < 0);
+				companyCharges = companyCharges + 90;                                      // Adding Hotel Charges in Company Charges..............
+				totalHotelExpanse += hotelExpanse;
+				if (hotelExpanse <= 90) {
+					savedMoney = savedMoney + (90 - hotelExpanse);                           // Addition of Hotel Expanses less than Allowable..............
+				}
+				if (hotelExpanse > 90) {
+					employeeCharges = employeeCharges + (hotelExpanse - 90);             // Addition of Hotel Expanses greater than Allowable..............
+				}
+		
+			}
+			cout << "  Total Hotel Expanse is: $" << totalHotelExpanse << endl << endl;
+			totalExpense = totalExpense + totalHotelExpanse;                              // Adding Hotel Expenses in Total Expenses...........
+		}
+		void getMeal(int& days, int& daysCount, int& timeOfDeparture, int& timeOfArrival, double& employeeCharges, double& companyCharges, double& savedMoney, double& totalExpense) {   // Defining get Seminar Expanse Function.......    
+			double breakfastRate = 0, lunchRate = 0, dinnerRate = 0;
+			for (days = 1; days <= daysCount; days++) {
+		
+				if (days == 1) {
+					cout << "Enter the details for Day " << days << " : " << endl;
+					if (timeOfDeparture < 7 && timeOfDeparture >= 0) {
+						do {
+							cout << "Enter the Bill for day " << days << " Breakfast: "; cin >> breakfastRate;          // Condition For Meal Before 7'o Clock
+						} while (breakfastRate < 0);
+						do {
+							cout << "Enter the Bill for day " << days << " Lunch: "; cin >> lunchRate;
+						} while (lunchRate < 0);
+						do {
+							cout << "Enter the Bill for day " << days << " Dinner: "; cin >> dinnerRate;
+						} while (dinnerRate < 0);
+		
+					}
+					else if (timeOfDeparture < 12 && timeOfDeparture >= 7) {
+						do {
+							cout << "Enter the Bill for day " << days << " Lunch: "; cin >> lunchRate;
+						} while (lunchRate < 0);
+						do {
+							cout << "Enter the Bill for day " << days << " Dinner: "; cin >> dinnerRate;
+						} while (dinnerRate < 0);                                                           // Condition For Meal Before 12'o Clock
+		
+					}
+					else if (timeOfDeparture < 18 && timeOfDeparture >= 12) {
+						do {
+							cout << "Enter the Bill for day " << days << " Dinner: "; cin >> dinnerRate;
+						} while (dinnerRate < 0);
+						// Condition For Meal Before 6'o Clock
+		
+					}
+					else {}
+				}
+				if (daysCount != 1 && days != 1) {
+					cout << "Enter the details for Day " << days << " : " << endl;
+					if (days == daysCount) {
+						if (timeOfArrival > 8 && timeOfArrival <= 13) {
+							do {
+								cout << "Enter the Bill for day " << days << " Breakfast: "; cin >> breakfastRate;          // Condition For Meal Before 7'o Clock
+							} while (breakfastRate < 0);
+						}
+						else if (timeOfArrival > 13 && timeOfArrival <= 19) {
+							do {
+								cout << "Enter the Bill for day " << days << " Breakfast: "; cin >> breakfastRate;          // Condition For Meal Before 7'o Clock
+							} while (breakfastRate < 0);
+							do {
+								cout << "Enter the Bill for day " << days << " Lunch: "; cin >> lunchRate;
+							} while (lunchRate < 0);             // Condition For Meal After 1'o Clock
+						}
+						else if (timeOfArrival > 19 && timeOfArrival <= 24) {
+							do {
+								cout << "Enter the Bill for day " << days << " Breakfast: "; cin >> breakfastRate;          // Condition For Meal Before 7'o Clock
+							} while (breakfastRate < 0);
+							do {
+								cout << "Enter the Bill for day " << days << " Lunch: "; cin >> lunchRate;
+							} while (lunchRate < 0);
+							do {
+								cout << "Enter the Bill for day " << days << " Dinner: "; cin >> dinnerRate;
+							} while (dinnerRate < 0);
+						}
+						else {}
+					}
+					else {
+						cout << "Enter the details for Day " << days << " : " << endl;
+						do {
+							cout << "Enter the Bill for day " << days << " Breakfast: "; cin >> breakfastRate;          // Condition For Meal Before 7'o Clock
+						} while (breakfastRate < 0);
+						do {
+							cout << "Enter the Bill for day " << days << " Lunch: "; cin >> lunchRate;
+						} while (lunchRate < 0);
+						do {
+							cout << "Enter the Bill for day " << days << " Dinner: "; cin >> dinnerRate;
+						} while (dinnerRate < 0);                  // Asking For Meal Charges From User...........
+					}
+				}
+				else {}
+			}
+		
+		
+			if (breakfastRate <= 9) {
+				companyCharges += 9;
+				savedMoney += (9 - breakfastRate);               // Calculating Breakfast Charges less than Allowable...............
+				totalExpense += breakfastRate;
+			}
+			else {
+				employeeCharges += (breakfastRate - 9);
+				companyCharges += 9;                             // Calculating Breakfast Charges greater than Allowable...............
+				totalExpense += breakfastRate;
+			}
+			if (lunchRate <= 12) {
+				companyCharges += 12;
+				savedMoney += (12 - lunchRate);                   // Calculating Lunch Charges less than Allowable...............
+				totalExpense += lunchRate;
+			}
+			else {
+				employeeCharges += (lunchRate - 12);
+				companyCharges += 12;                             // Calculating Breakfast Charges greater than Allowable...............
+				totalExpense += lunchRate;
+			}
+			if (dinnerRate <= 16) {
+				companyCharges += 16;
+				savedMoney += (16 - dinnerRate);                 // Calculating Dinner Charges less than Allowable...............
+				totalExpense += dinnerRate;
+			}
+			else {
+				employeeCharges += (dinnerRate - 16);
+				companyCharges += 16;                             // Calculating Breakfast Charges greater than Allowable...............
+				totalExpense += dinnerRate;
+			}
+			cout << "  Total Meal Charges are $" << breakfastRate + lunchRate + dinnerRate << endl;           // Showing Meal Charges to User...........
+		
+	    }
